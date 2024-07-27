@@ -24,6 +24,7 @@ function App() {
           <Route path="/votes" element={<Votes />} />
           <Route path="/votes" element={<Votes />} />
           <Route path="/addvoters" element={<AddVoters />} />
+          <Route path="/addcandidates" element={<AddCandidate />} />
         </Route>
       </Routes>
     </main>
