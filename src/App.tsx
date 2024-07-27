@@ -18,17 +18,18 @@ function App() {
                     <Route path="/sign-up" element={<SignupForm />} />
                 </Route>
 
-                {/* private routes */}
-                <Route element={<RootLayout />}>
-                    <Route index element={<Home />} />
-                    <Route path="/explore" element={<Explore />} />
-                    <Route path="/candidates" element={<Candidates />} />
-                    <Route path="/votes" element={<Votes />} />
-                    <Route path="/admin" element={<Sidebar />} />
-                </Route>
-            </Routes>
-        </main>
-    );
+        {/* private routes */}
+        <Route element={<RootLayout />}>
+          <Route index element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/votes" element={<Votes />} />
+          <Route path="/votes" element={<Votes />} />
+          <Route path="/addvoters" element={<AddVoters />} />
+          <Route path="/addcandidates" element={<AddCandidate />} />
+        </Route>
+      </Routes>
+    </main>
+  );
 }
 
 export default App;

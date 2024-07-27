@@ -1,5 +1,5 @@
-import Topbar from "@/components/shared/Topbar"
-import { Outlet } from "react-router-dom"
+import Topbar from "@/components/shared/Topbar";
+import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
   return (
@@ -12,9 +12,9 @@ const RootLayout = () => {
       </section>
 
       {/* <Bottombar /> */}
-      <footer className="z-50 flex-center bg-primary-600 mt-5 py-2">@anubhab</footer>
+      {/* <footer className="z-50 flex-center bg-primary-600 py-2">@anubhab</footer> */}
     </div>
-  )
-}
+  );
+};
 
-export default RootLayout
+export default RootLayout;
