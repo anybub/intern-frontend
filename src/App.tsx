@@ -1,12 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 
-import './index.css'
+import "./index.css";
 import SignupForm from "./_auth/forms/SignupForm";
 import SignInForm from "./_auth/forms/SignInForm";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
-import {  Explore, Home, Votes } from "./_root/pages";
-
+import { AddVoters, Explore, Home, Votes, AddCandidate } from "./_root/pages";
 
 function App() {
   return (
@@ -22,16 +21,13 @@ function App() {
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="/explore" element={<Explore />} />
-          {/* <Route path="/candidates" element={<Candidates />} /> */}
           <Route path="/votes" element={<Votes />} />
-          {/* <Route path="/createelection" element={<CreateElection />} /> */}
-
-          </Route>
+          <Route path="/votes" element={<Votes />} />
+          <Route path="/addvoters" element={<AddVoters />} />
+        </Route>
       </Routes>
-      
-      
     </main>
-  )
+  );
 }
 
-export default App
+export default App;

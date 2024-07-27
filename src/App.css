@@ -41,3 +41,100 @@
   color: #888;
 }
 
+
+.adminPage {
+  display: flex;
+  flex-wrap: wrap;
+  color: black;
+}
+
+.menu {
+  width: 200px;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu li {
+  padding: 10px 0;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+.candidate{
+  display: flex;
+  /* align-items:; */
+  justify-content: space-between;
+  gap: 2rem;
+  
+}
+
+.candidate-list {
+  display: flex;
+  flex: 8;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.candidate-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  max-width: 300px;
+  flex: 1 1 calc(33.333% - 20px);
+}
+
+.candidate-card img {
+  width: 100%;
+  height: auto;
+}
+
+.add-candidate {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 4;
+}
+
+.add-candidate input,
+.add-candidate textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+.add-candidate button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu {
+    width: 100%;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .candidate-card {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .candidate-card {
+    flex: 1 1 100%;
+  }
+}
