@@ -9,26 +9,25 @@ import { Explore, Home, Votes } from "./_root/pages";
 import Sidebar from "./components/shared/Sidebar";
 
 function App() {
-    return (
-        <main className="flex h-screen">
-            <Routes>
-                {/* public routes */}
-                <Route element={<AuthLayout />}>
-                    <Route path="/sign-in" element={<SignInForm />} />
-                    <Route path="/sign-up" element={<SignupForm />} />
-                </Route>
+  return (
+    <main className="flex h-screen">
+      <Routes>
+        {/* public routes */}
+        <Route element={<AuthLayout />}>
+          <Route path="/sign-in" element={<SignInForm />} />
+          <Route path="/sign-up" element={<SignupForm />} />
+        </Route>
 
-                {/* private routes */}
-                <Route element={<RootLayout />}>
-                    <Route index element={<Home />} />
-                    <Route path="/explore" element={<Explore />} />
-                    <Route path="/votes" element={<Votes />} />
-                    <Route path="/votes" element={<Votes />} />
-                    <Route path="/createElection" element={<Sidebar />} />
-                </Route>
-            </Routes>
-        </main>
-    );
+        {/* private routes */}
+        <Route element={<RootLayout />}>
+          <Route index element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/votes" element={<Votes />} />
+          <Route path="/createElection" element={<Sidebar />} />
+        </Route>
+      </Routes>
+    </main>
+  );
 }
 
 export default App;
