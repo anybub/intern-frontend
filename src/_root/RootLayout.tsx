@@ -12,7 +12,7 @@ const RootLayout = () => {
       </section>
 
       {/* <Bottombar /> */}
-      <footer className="z-50 flex-center bg-primary-600 py-2">@anubhab</footer>
+      <footer className="z-50 flex-center bg-primary-600 mt-5 py-2">@anubhab</footer>
     </div>
   )
 }
