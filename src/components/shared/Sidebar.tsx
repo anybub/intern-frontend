@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../ui/button";
-import CreateElection from "@/_auth/forms/CreateElection";
+import CreateElection from "@/_root/pages/admin/CreateElection";
+import { AddCandidate } from "@/_root/pages";
 const Sidebar = () => {
     const [show, setShow] = useState(0);
     return (
@@ -28,6 +29,7 @@ const Sidebar = () => {
             </div>
             <div className="col-span-2 bg-gray-100 p-6">
                 {show === 0 && <CreateElection />}
+                {show === 1 && <AddCandidate />}
             </div>
         </div>
     );
