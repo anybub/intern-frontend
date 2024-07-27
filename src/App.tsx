@@ -5,7 +5,7 @@ import SignupForm from "./_auth/forms/SignupForm";
 import SignInForm from "./_auth/forms/SignInForm";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
-import { Candidates, Explore, Home, Votes } from "./_root/pages";
+import {  Explore, Home, Votes } from "./_root/pages";
 
 
 function App() {
@@ -22,10 +22,14 @@ function App() {
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="/explore" element={<Explore />} />
-          <Route path="/candidates" element={<Candidates />} />
+          {/* <Route path="/candidates" element={<Candidates />} /> */}
           <Route path="/votes" element={<Votes />} />
+          {/* <Route path="/createelection" element={<CreateElection />} /> */}
+
           </Route>
       </Routes>
+      
+      
     </main>
   )
 }
