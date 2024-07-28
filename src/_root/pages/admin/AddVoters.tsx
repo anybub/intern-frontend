@@ -1,6 +1,6 @@
 import { useState } from "react";
 import BranchCard from "@/components/ui/branchCard";
-import { log } from "console";
+// import { log } from "console";
 
 // Define types for the branch and year keys
 type Branch = "cse" | "ece" | "eie" | "ee" | "me" | "ce";

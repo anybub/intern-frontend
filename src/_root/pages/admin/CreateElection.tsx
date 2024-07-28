@@ -48,10 +48,10 @@ const CreateElection = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-slate-500 py-10 px-5 w-full">
+        <div className="flex flex-center max-w-full min-h-lvh bg-slate-500 py-5 px-5 ">
             <form
                 onSubmit={handleSubmit}
-                className="bg-dark-2 p-8 rounded-xl shadow-lg max-w-md w-full m-12">
+                className="bg-dark-2 p-8 rounded-xl shadow-lg  max-w-full w-full ">
                 <h2 className="text-2xl font-bold mb-6 text-white">
                     Create Election
                 </h2>
@@ -89,43 +89,45 @@ const CreateElection = () => {
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div className="mb-4 w-full">
-                    <label
-                        htmlFor="start-time"
-                        className="block text-base-semibold text-white mb-2">
-                        Start Time:
-                    </label>
-                    <DatePicker
-                        selected={startTime}
-                        onChange={(date) => setStartTime(date)}
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={15}
-                        dateFormat="MMMM d, yyyy h:mm aa"
-                        className="w-full h-12 bg-dark-4 border border-dark-4 text-light-4 placeholder:text-light-4 rounded-md px-3"
-                    />
-                    {err && (
-                        <p className="text-red-500">
-                            Start time must be in the future.
-                        </p>
-                    )}
-                </div>
-                <div className="mb-6">
-                    <label
-                        htmlFor="end-time"
-                        className="block text-base-semibold text-white mb-2 max-w-full">
-                        End Time:
-                    </label>
+                <div className="mb-6 w-full flex flex-row">
                     <div className="w-full">
+                        <label
+                            htmlFor="start-time"
+                            className="block text-base-semibold text-white mb-2">
+                            Start Time:
+                        </label>
                         <DatePicker
-                            selected={endTime}
-                            onChange={(date) => setEndTime(date)}
+                            selected={startTime}
+                            onChange={(date) => setStartTime(date)}
                             showTimeSelect
                             timeFormat="HH:mm"
                             timeIntervals={15}
                             dateFormat="MMMM d, yyyy h:mm aa"
                             className="w-full h-12 bg-dark-4 border border-dark-4 text-light-4 placeholder:text-light-4 rounded-md px-3"
                         />
+                        {err && (
+                            <p className="text-red-500">
+                                Start time must be in the future.
+                            </p>
+                        )}
+                    </div>
+                    <div className="w-full">
+                        <label
+                            htmlFor="end-time"
+                            className="block text-base-semibold text-white mb-2 max-w-full">
+                            End Time:
+                        </label>
+                        <div className="w-full">
+                            <DatePicker
+                                selected={endTime}
+                                onChange={(date) => setEndTime(date)}
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={15}
+                                dateFormat="MMMM d, yyyy h:mm aa"
+                                className="w-full h-12 bg-dark-4 border border-dark-4 text-light-4 placeholder:text-light-4 rounded-md px-3"
+                            />
+                        </div>
                     </div>
                 </div>
                 <button
