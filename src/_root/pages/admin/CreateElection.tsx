@@ -42,10 +42,10 @@ const CreateElection = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-slate-500 py-10 px-5 w-full">
+        <div className="flex  min-h-screen bg-slate-500  w-full">
             <form
                 onSubmit={handleSubmit}
-                className="bg-dark-2 p-8 rounded-xl shadow-lg max-w-md w-full m-12 ">
+                className="bg-dark-2 p-8 rounded-xl shadow-lg  w-full">
                 <h2 className="text-2xl font-bold mb-6 text-white">
                     Create Election
                 </h2>

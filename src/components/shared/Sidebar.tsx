@@ -27,7 +27,7 @@ const Sidebar = () => {
                     Add Voters
                 </Button>
             </div>
-            <div className="col-span-2 bg-gray-100 p-6">
+            <div className="col-span-2 bg-gray-100">
                 {show === 0 && <CreateElection />}
                 {show === 1 && <AddCandidate />}
             </div>
