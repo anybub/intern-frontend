@@ -4,19 +4,24 @@ export const topbarLinks = [
     //   route: "/",
     //   label: "Home",
     // },
+    // {
+    //     imgURL: "/assets/explore.png",
+    //     route: "/explore",
+    //     label: "Explore",
+    // },
     {
-      imgURL: "/assets/explore.png",
-      route: "/explore",
-      label: "Explore",
+        imgURL: "/assets/explore.png",
+        route: "/",
+        label: "Home",
     },
+    // {
+    //     imgURL: "/assets/votes.png",
+    //     route: "/votes",
+    //     label: "Votes",
+    // },
     {
-      imgURL: "/assets/candidates.png",
-      route: "/candidates",
-      label: "Candidates",
+        imgURL: "/assets/votes.png",
+        route: "/createElection",
+        label: "Hold a Election",
     },
-    {
-      imgURL: "/assets/votes.png",
-      route: "/votes",
-      label: "Votes",
-    }
-  ];
+];
