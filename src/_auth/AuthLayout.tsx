@@ -1,17 +1,22 @@
 import { Navigate, Outlet } from "react-router-dom";
-
+import useUserStore  from "@/store/useUser";
+import Topbar from "@/components/shared/Topbar";
 const AuthLayout = () => {
-  const isAuthenticated=false;
+  const {user}=useUserStore((state)=>({
+    user:state.user
+  })
+  )
   return (
     <>
-      {isAuthenticated?(
+      {user?(
         <Navigate to="/" />
       ):(
-        <>
-          <section className="flex flex-1 justify-center items-center flex-col py-10">
+        <div className="w-full md:flex-col">
+          <Topbar />
+          <section className=" bg-dark-1 flex items-center justify-center min-h-[100%]">
             <Outlet />
           </section>
-        </>
+        </div>
       )}
     </>
   )

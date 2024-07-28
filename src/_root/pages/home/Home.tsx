@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
-        <div>
+        <div className="bg-dark-1">
             <HeroSlider />
             <div className="flex flex-col text-center gap-10 mt-5">
                 <div>
@@ -30,7 +30,7 @@ const Home = () => {
                     <h2 className="h2-bold text-off-white">
                         Current Elections
                     </h2>
-                    <div className="flex">
+                    <div className="flex flex-col md:flex-row">
                         <Link
                             to="/elections"
                             className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500  hover:text-dark-1 duration-200">
@@ -63,7 +63,7 @@ const Home = () => {
                     <h2 className="h2-bold text-off-white">
                         Upcoming Elections
                     </h2>
-                    <div className="flex">
+                    <div className="flex flex-col md:flex-row">
                         <div className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200">
                             <h4 className="h3-bold p-2">Gymkhana 2025</h4>
                             <p className="base-medium px-4">
