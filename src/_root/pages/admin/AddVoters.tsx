@@ -1,23 +1,74 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import BranchCard from "@/components/ui/branchCard";
+import { log } from "console";
+
+// Define types for the branch and year keys
+type Branch = "cse" | "ece" | "eie" | "ee" | "me" | "ce";
+type Year = "first-year" | "second-year" | "third-year" | "final-year";
 
 const AddVoters = () => {
-    const [startRange, setStartRange] = useState<number | "">("");
-    const [endRange, setEndRange] = useState<number | "">("");
-    const [cnt, setCnt] = useState([3, 3, 54, 5, 6, 7, 7, 71, 2, 3]);
     const [error, setError] = useState<string | null>(null);
-    const scholarIdRange = { start: 1000000, end: 9999999 };
+    const [cnt, setCnt] = useState([1, 2, 3, 4, 5]);
+    const [scholarIdRange, setScholarIdRange] = useState({
+        start: 1000000,
+        end: 9999999,
+    });
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (
-            startRange.toString().length !== 7 ||
-            endRange.toString().length !== 7
-        ) {
-            setError("Scholar ID range should be a 7-digit value.");
-        } else {
+    const ranges: Record<
+        Branch,
+        Record<Year, { start: number; end: number }>
+    > = {
+        cse: {
+            "first-year": { start: 2412001, end: 2412170 },
+            "second-year": { start: 2312001, end: 2312170 },
+            "third-year": { start: 2212001, end: 2212170 },
+            "final-year": { start: 2112001, end: 2112170 },
+        },
+        ece: {
+            "first-year": { start: 2414001, end: 2414170 },
+            "second-year": { start: 2314001, end: 2314170 },
+            "third-year": { start: 2214001, end: 2214170 },
+            "final-year": { start: 2114001, end: 2114170 },
+        },
+        eie: {
+            "first-year": { start: 211, end: 1999999 },
+            "second-year": { start: 2000000, end: 2999999 },
+            "third-year": { start: 3000000, end: 3999999 },
+            "final-year": { start: 4000000, end: 4999999 },
+        },
+        ee: {
+            "first-year": { start: 2413001, end: 2413170 },
+            "second-year": { start: 2313001, end: 2313170 },
+            "third-year": { start: 2213001, end: 2213170 },
+            "final-year": { start: 2113001, end: 2113170 },
+        },
+        me: {
+            "first-year": { start: 211, end: 1999999 },
+            "second-year": { start: 2000000, end: 2999999 },
+            "third-year": { start: 3000000, end: 3999999 },
+            "final-year": { start: 2116001, end: 4999999 },
+        },
+        ce: {
+            "first-year": { start: 2411001, end: 2411170 },
+            "second-year": { start: 2311001, end: 2311170 },
+            "third-year": { start: 2211001, end: 2211170 },
+            "final-year": { start: 2111001, end: 2111170 },
+        },
+    };
+
+    const handleSubmit = (event: React.FormEvent) => {
+        event.preventDefault();
+        const form = event.target as HTMLFormElement;
+        const branch = form.branch.value as Branch;
+        const year = form.year.value as Year;
+
+        if (ranges[branch] && ranges[branch][year]) {
+            console.log(ranges[branch][year]);
+            setScholarIdRange(ranges[branch][year]);
+
             setError(null);
-            console.log({ startRange, endRange });
+        } else {
+            setError("Invalid branch or year selected.");
         }
     };
 
@@ -62,46 +113,6 @@ const AddVoters = () => {
                             <option value="third-year">3rd Year</option>
                             <option value="final-year">4th Year</option>
                         </select>
-                    </div>
-
-                    <div>
-                        <div>
-                            <label
-                                htmlFor="start-range"
-                                className="block text-lg font-medium mb-2">
-                                Starting ScholarID:
-                            </label>
-                            <input
-                                type="number"
-                                id="start-range"
-                                name="start-range"
-                                value={startRange}
-                                onChange={(e) =>
-                                    setStartRange(Number(e.target.value))
-                                }
-                                className="border rounded p-2 w-full"
-                                placeholder="Enter start ID"
-                            />
-                        </div>
-
-                        <div>
-                            <label
-                                htmlFor="end-range"
-                                className="block text-lg font-medium mb-2">
-                                Ending ScholarID:
-                            </label>
-                            <input
-                                type="number"
-                                id="end-range"
-                                name="end-range"
-                                value={endRange}
-                                onChange={(e) =>
-                                    setEndRange(Number(e.target.value))
-                                }
-                                className="border rounded p-2 w-full"
-                                placeholder="Enter end ID"
-                            />
-                        </div>
                     </div>
 
                     {error && (
