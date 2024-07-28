@@ -1,0 +1,21 @@
+import React from "react";
+
+interface CardProps {
+  branch: string;
+  year: string;
+  scholarIdRange: { start: number | ""; end: number | "" };
+}
+
+const BranchCard: React.FC<CardProps> = ({ branch, year, scholarIdRange }) => {
+  return (
+    <div className="bg-white border rounded-lg shadow-md p-4">
+      <h2 className="text-xl font-semibold mb-2">Branch: {branch}</h2>
+      <p className="text-lg mb-2">Year: {year}</p>
+      <p className="text-lg">
+        Scholar ID Range: {scholarIdRange.start} - {scholarIdRange.end}
+      </p>
+    </div>
+  );
+};
+
+export default BranchCard;
