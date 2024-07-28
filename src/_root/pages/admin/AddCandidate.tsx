@@ -1,16 +1,16 @@
 import { useState } from "react";
-import CandidateCard from "@/components/ui/candidateCard";
-const App = () => {
+import CandidateCard from "@/components/shared/candidateCard";
+const AddCandidate = () => {
     const [email, setEmail] = useState("");
 
-    const [data, setdata] = useState<number[]>([1, 2, 3, 4, 5, 4, 5, 6, 7]);
+    const [data] = useState<number[]>([1, 2, 3, 4, 5, 4, 5, 6, 7]);
 
     const handleSubmit = () => {
         // setdata("hue");
     };
 
     return (
-        <div className="container mx-auto p-4 bg-slate-500 ">
+        <div className="container mx-auto p-4 bg-dark-2 ">
             <h1 className="text-2xl font-bold mb-4">Add Candidate</h1>
             <form
                 className="flex w-[100%]  items-center justify-center gap-4"
@@ -48,4 +48,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default AddCandidate;

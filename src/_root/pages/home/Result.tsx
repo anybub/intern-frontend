@@ -18,7 +18,7 @@ interface CandidateCardProps {
 
 const CandidateCard = ({ candidate, isWinner }: CandidateCardProps) => {
     return (
-        <div className="max-w-sm rounded overflow-hidden shadow-lg mt-4">
+        <div className="max-w-sm rounded overflow-hidden shadow-lg mt-4 bg-primary-700">
             <img
                 className="w-full"
                 src={candidate.imageUrl}

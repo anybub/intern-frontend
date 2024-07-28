@@ -48,7 +48,7 @@ const CreateElection = () => {
     };
 
     return (
-        <div className="flex flex-center max-w-full min-h-lvh bg-slate-500 py-5 px-5 ">
+        <div className="flex max-w-full min-h-lvh bg-slate-500">
             <form
                 onSubmit={handleSubmit}
                 className="bg-dark-2 p-8 rounded-xl shadow-lg  max-w-full w-full ">

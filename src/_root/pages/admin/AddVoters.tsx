@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BranchCard from "@/components/ui/branchCard";
+import BranchCard from "@/components/shared/branchCard";
 // import { log } from "console";
 
 // Define types for the branch and year keys
@@ -8,7 +8,7 @@ type Year = "first-year" | "second-year" | "third-year" | "final-year";
 
 const AddVoters = () => {
   const [error, setError] = useState<string | null>(null);
-  const [cnt, setCnt] = useState([1, 2, 3, 4, 5]);
+  const [cnt] = useState([1, 2, 3, 4, 5]);
   const [scholarIdRange, setScholarIdRange] = useState({
     start: 1000000,
     end: 9999999,
@@ -70,9 +70,11 @@ const AddVoters = () => {
   };
 
   return (
-    <div className="bg-slate-500 text-black">
-      <div className="container mx-auto px-8 p-8 bg-white shadow-md rounded-lg">
-        <h1 className="text-2xl text-center font-bold mb-4">Add Voters</h1>
+    <div className="bg-dark-2 text-black">
+      <div className="container bg-dark-2 mx-auto px-8 p-8  shadow-md rounded-lg">
+        <h1 className="text-2xl text-center font-bold mb-4 text-white">
+          Add Voters
+        </h1>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="branch" className="block text-lg font-medium mb-2">
@@ -117,7 +119,7 @@ const AddVoters = () => {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-4">
         {cnt.map((value, index) => (
           <BranchCard
             key={index}

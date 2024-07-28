@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
-        <div>
+        <div className="bg-dark-1">
             <HeroSlider />
             <div className="flex flex-col text-center gap-10 mt-5">
                 <div>
                     <h2 className="h2-bold p-3 text-off-white">About</h2>
-                    <p className="px-4 body-medium text-light-2">
+                    <p className="px-4 body-medium text-light-2 flex items-center">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                         Vero optio quae voluptatibus quod sapiente nihil
                         numquam? Quae odit iste sit, itaque tenetur, at ab
@@ -30,7 +30,7 @@ const Home = () => {
                     <h2 className="h2-bold text-off-white">
                         Current Elections
                     </h2>
-                    <div className="flex">
+                    <div className="flex flex-col md:flex-row">
                         <Link
                             to="/elections"
                             className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500  hover:text-dark-1 duration-200">
@@ -63,7 +63,7 @@ const Home = () => {
                     <h2 className="h2-bold text-off-white">
                         Upcoming Elections
                     </h2>
-                    <div className="flex">
+                    <div className="flex flex-col md:flex-row">
                         <div className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200">
                             <h4 className="h3-bold p-2">Gymkhana 2025</h4>
                             <p className="base-medium px-4">
@@ -112,7 +112,7 @@ const Home = () => {
                 </div>
             </div>
             <div className="flex justify-center mt-10">
-                <Link to="/create-election">
+                <Link to="/createElection">
                     <Button className="shad-button_primary">
                         Create Election
                     </Button>
