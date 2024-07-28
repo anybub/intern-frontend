@@ -9,7 +9,7 @@ const Home = () => {
             <div className="flex flex-col text-center gap-10 mt-5">
                 <div>
                     <h2 className="h2-bold p-3 text-off-white">About</h2>
-                    <p className="px-4 body-medium text-light-2">
+                    <p className="px-4 body-medium text-light-2 flex items-center">
                         Lorem ipsum dolor sit amet consectetur adipisicing elit.
                         Vero optio quae voluptatibus quod sapiente nihil
                         numquam? Quae odit iste sit, itaque tenetur, at ab
@@ -112,7 +112,7 @@ const Home = () => {
                 </div>
             </div>
             <div className="flex justify-center mt-10">
-                <Link to="/create-election">
+                <Link to="/createElection">
                     <Button className="shad-button_primary">
                         Create Election
                     </Button>

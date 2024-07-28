@@ -8,10 +8,10 @@ interface CardProps {
 
 const BranchCard: React.FC<CardProps> = ({ branch, year, scholarIdRange }) => {
   return (
-    <div className="bg-white border rounded-lg shadow-md p-4">
-      <h2 className="text-xl font-semibold mb-2">Branch: {branch}</h2>
-      <p className="text-lg mb-2">Year: {year}</p>
-      <p className="text-lg">
+    <div className=" border rounded-lg shadow-md p-4">
+      <h2 className="text-xl font-semibold mb-2 text-white">Branch: {branch}</h2>
+      <p className="text-lg mb-2 text-white">Year: {year}</p>
+      <p className="text-lg text-white">
         Scholar ID Range: {scholarIdRange.start} - {scholarIdRange.end}
       </p>
     </div>
