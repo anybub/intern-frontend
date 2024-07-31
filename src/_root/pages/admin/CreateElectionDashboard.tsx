@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import CreateElection from "@/_root/pages/admin/CreateElection";
 import { AddCandidate, AddVoters } from "@/_root/pages";
 const CreateElectionDashboard = () => {
@@ -35,6 +35,5 @@ const CreateElectionDashboard = () => {
         </div>
     );
 };
-
 
 export default CreateElectionDashboard;

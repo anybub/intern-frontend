@@ -5,7 +5,8 @@ import SignupForm from "./_auth/forms/SignupForm";
 import SignInForm from "./_auth/forms/SignInForm";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
-import { Home,ElectionResultsPage ,AdminDashBoard} from "./_root/pages";
+import { Home, ElectionResultsPage, AdminDashBoard } from "./_root/pages";
+import Dashboard from "./_root/pages/admin/Dashboard";
 function App() {
     return (
         <main className="flex h-screen">
@@ -19,8 +20,15 @@ function App() {
                 {/* private routes */}
                 <Route element={<RootLayout />}>
                     <Route index element={<Home />} />
-                    <Route path="/createElection" element={<AdminDashBoard />} />
-                    <Route path="/result/:id" element={<ElectionResultsPage />} />
+                    <Route
+                        path="/createElection"
+                        element={<AdminDashBoard />}
+                    />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route
+                        path="/result/:id"
+                        element={<ElectionResultsPage />}
+                    />
                 </Route>
             </Routes>
         </main>
