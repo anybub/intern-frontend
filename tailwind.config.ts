@@ -1,7 +1,5 @@
-/** @type {import('tailwindcss').Config} */
-const defaultTheme = require("tailwindcss/defaultTheme");
-// import defaultTheme from "tailwindcss/defaultTheme";
-module.exports = {
+import type { Config } from "tailwindcss";
+const config = {
     darkMode: ["class"],
     content: [
         "./pages/**/*.{ts,tsx}",
@@ -38,8 +36,8 @@ module.exports = {
                 xs: "480px",
             },
             width: {
-                420: "420px",
-                465: "465px",
+                "420": "420px",
+                "465": "465px",
             },
             fontFamily: {
                 inter: ["Inter", "sans-serif"],
@@ -61,4 +59,6 @@ module.exports = {
         },
     },
     plugins: [require("tailwindcss-animate")],
-};
+} satisfies Config;
+
+export default config;
