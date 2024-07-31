@@ -24,6 +24,7 @@
     "lucide-react": "^0.397.0",
     "nodemon": "^3.1.4",
     "react": "^18.3.1",
+    "react-datepicker": "^7.3.0",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.0",
     "react-router-dom": "^6.24.0",
