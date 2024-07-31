@@ -7,6 +7,7 @@ import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Home, ElectionResultsPage, AdminDashBoard } from "./_root/pages";
 import Dashboard from "./_root/pages/admin/Dashboard";
+import VoteCast from "./_root/pages/home/VoteCast";
 function App() {
     return (
         <main className="flex h-screen">
@@ -29,6 +30,7 @@ function App() {
                         path="/result/:id"
                         element={<ElectionResultsPage />}
                     />
+                    <Route path="/votecast" element={<VoteCast />} />
                 </Route>
             </Routes>
         </main>
