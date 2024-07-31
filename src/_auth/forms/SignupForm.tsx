@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,12 +23,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { useNavigate } from "react-router-dom";
+import useUserStore from "@/store/useUser";
+import { useMutation } from "@tanstack/react-query";
 const SignupForm = () => {
-  const isCreatingAccount = false;
-  const isSigningInUser = false;
-  const isUserLoading = false;
-
+  const navigate = useNavigate();
+  const { setUser } = useUserStore((state) => {
+    return {
+      setUser: state.setUser,
+    };
+  });
+  const signUp = useMutation({
+    mutationFn: async (values: z.infer<typeof SignupValidation>) => {
+      const res = await fetch("http://localhost:5000/api/v1/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }).then((res) => res.json());
+      return res;
+    },
+  });
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -37,15 +54,19 @@ const SignupForm = () => {
       email: "",
       password: "",
       address: "",
-      branch: "CSE",
+      branch: "cse",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof SignupValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof SignupValidation>) {
+    try {
+      const data = await signUp.mutateAsync(values);
+      setUser(data);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   }
   form.watch();
   return (
@@ -74,7 +95,12 @@ const SignupForm = () => {
               <FormItem>
                 <FormLabel className="shad-form_label">Name</FormLabel>
                 <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
+                  <Input
+                    type="text"
+                    className="shad-input"
+                    {...field}
+                    placeholder="Enter your username"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -86,11 +112,14 @@ const SignupForm = () => {
             name="scholarId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="shad-form_label">
-                  Registration No.
-                </FormLabel>
+                <FormLabel className="shad-form_label">Scholar ID</FormLabel>
                 <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
+                  <Input
+                    type="text"
+                    className="shad-input"
+                    {...field}
+                    placeholder="2114056"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,7 +133,12 @@ const SignupForm = () => {
               <FormItem>
                 <FormLabel className="shad-form_label">Email</FormLabel>
                 <FormControl>
-                  <Input type="text" className="shad-input" {...field} />
+                  <Input
+                    type="text"
+                    className="shad-input"
+                    {...field}
+                    placeholder="abc@ece.nits.ac.in"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -136,6 +170,7 @@ const SignupForm = () => {
                   <Input type="text" className="shad-input" {...field} />
                 </FormControl>
                 <FormMessage about="Provide Metamask Account Address" />
+                <FormDescription about="Provide Metamask Address"/>
               </FormItem>
             )}
           />
@@ -151,21 +186,23 @@ const SignupForm = () => {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select Your Branch"/>
+                      <SelectValue placeholder="Select Your Branch" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="CSE">CSE</SelectItem>
-                    <SelectItem value="ECE">ECE</SelectItem>
-                    <SelectItem value="Mech">Mech</SelectItem>
-                    <SelectItem value="Civil">Civil</SelectItem>
+                    <SelectItem value="cse">CSE</SelectItem>
+                    <SelectItem value="ece">ECE</SelectItem>
+                    <SelectItem value="me">Mech</SelectItem>
+                    <SelectItem value="ce">Civil</SelectItem>
+                    <SelectItem value="eie">EIE</SelectItem>
+                    <SelectItem value="ee">EE</SelectItem>
                   </SelectContent>
                 </Select>
               </FormItem>
             )}
           />
           <Button type="submit" className="shad-button_primary">
-            {isCreatingAccount || isSigningInUser || isUserLoading ? (
+            {signUp.isPending ? (
               <div className="flex-center gap-2">
                 <Loader /> Loading...
               </div>
