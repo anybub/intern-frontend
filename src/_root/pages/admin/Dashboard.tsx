@@ -2,7 +2,7 @@ import PreviousElectionCard from "@/components/shared/previousElectionCard";
 import useUserStore from "@/store/useUser";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
+import { Button } from "@/components/ui/button";
 const Dashboard = () => {
     const [cnt] = useState([1, 2, 3, 4, 5]);
 
@@ -33,11 +33,11 @@ const Dashboard = () => {
             <Link
                 to="/createElection"
                 className="flex  justify-center items-center">
-                <button
+                <Button
                     type="submit"
                     className="bg-blue-500 text-white p-2 rounded w-[200px] text-center">
                     Create Election
-                </button>
+                </Button>
             </Link>
         </div>
     );
