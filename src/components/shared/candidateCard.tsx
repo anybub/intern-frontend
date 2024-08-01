@@ -1,18 +1,21 @@
 interface candidateCard {
   initial: boolean;
+  username: string;
+  scholarId: string;
+  branch: string;
 }
-const CandidateCard = ({ initial }: candidateCard) => {
+const CandidateCard = ({ initial ,username,scholarId,branch}: candidateCard) => {
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg mt-4 bg-primary-700">
+    <div className="max-w-sm rounded overflow-hidden shadow-lg mt-4 bg-primary-500">
       <img
         className="w-full h-40 object-cover rounded"
         src="https://cdn.britannica.com/38/196738-159-62BD9150/Slaves-sugarcane-island-aquatint-Caribbean-Antigua-Ten-1832.jpg"
         alt="Sunset in the mountains"
       />
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">I am Gandu Deepak</div>
-        <p className="text-base text-white font-bold">ScholarId:2113133</p>
-        <p className="text-base text-white font-bold">Branch:Electrical</p>
+        <div className="font-bold text-xl mb-2">{username}</div>
+        <p className="text-base text-white font-bold">{scholarId}</p>
+        <p className="text-base text-white font-bold">{branch}</p>
       </div>
       <div className="px-6 pt-4 pb-2 flex gap-4">
         <button

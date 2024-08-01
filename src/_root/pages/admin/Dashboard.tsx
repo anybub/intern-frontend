@@ -1,19 +1,24 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PreviousElectionCard from "@/components/shared/previousElectionCard";
 import useUserStore from "@/store/useUser";
 import { Button } from "@/components/ui/button";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
-interface reqType{
-  _id:string;
-  name:string;
-  email:string;
+interface reqType {
+  _id: string;
+  name: string;
+  email: string;
+}
+interface ElectionType {
+  _id: string;
+  name: string;
+  desp: string;
 }
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [cnt] = useState([1, 2, 3, 4, 5]);
+  const queryClient = useQueryClient();
   const { user } = useUserStore((state) => {
     return { user: state.user };
   });
@@ -34,7 +39,7 @@ const Dashboard = () => {
     },
   });
   const approveRequest = useMutation({
-    mutationFn: async (email:string) => {
+    mutationFn: async (email: string) => {
       const res = await fetch("http://localhost:5000/api/v1/user/makeAdmin", {
         method: "POST",
         headers: {
@@ -48,10 +53,23 @@ const Dashboard = () => {
       return res;
     },
   });
-  const { isPending,data:requests} = useQuery({
+  const { isPending, data: requests } = useQuery({
     queryKey: ["getRequests"],
     queryFn: async () => {
       const res = await fetch("http://localhost:5000/api/v1/user/requests", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      }).then((res) => res.json());
+      return res;
+    },
+  });
+  const { isPending: electionPending, data: elections } = useQuery({
+    queryKey: ["getElections"],
+    queryFn: async () => {
+      const res = await fetch("http://localhost:5000/api/v1/elections", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -79,18 +97,23 @@ const Dashboard = () => {
       console.log(error);
     }
   };
-  const handleApprove = async (email:string) => {
-   try{
+  const handleApprove = async (email: string) => {
+    try {
       await approveRequest.mutateAsync(email);
-   }catch(error){
+      await queryClient.invalidateQueries({
+        queryKey: ["getRequests"],
+        exact: true,
+        refetchType: "active",
+      });
+    } catch (error) {
       console.log(error);
-      toast({ 
+      toast({
         title: "Error",
         description: "Error in approving the request",
         variant: "destructive",
       });
-   }
-  }
+    }
+  };
   if (user === null) {
     return null; // or a loading indicator if preferred
   }
@@ -106,9 +129,16 @@ const Dashboard = () => {
       </div>
       {(user?.role === "Admin" || user?.role === "Super Admin") && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-4">
-          {cnt.map((_, index) => (
-            <PreviousElectionCard key={index} heading="ECE" date="2021-2022" />
-          ))}
+          {electionPending && <p>Loading...</p>}
+          {elections &&
+            elections.map((elec: ElectionType) => (
+              <PreviousElectionCard
+                key={elec._id}
+                title={elec.name}
+                desp={elec.desp}
+                id={elec._id}
+              />
+            ))}
         </div>
       )}
       {(user?.role === "Admin" || user?.role === "Super Admin") && (
@@ -136,7 +166,7 @@ const Dashboard = () => {
           <div className="flex flex-row md:flex-col">
             {isPending && <p>Loading...</p>}
             {requests &&
-              requests.map((req:reqType) => (
+              requests.map((req: reqType) => (
                 <div
                   key={req._id}
                   className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200"
@@ -145,7 +175,8 @@ const Dashboard = () => {
                   <p className="base-medium px-4">{req.email}</p>
                   <Button
                     className="bg-orange-500 text-white px-4 py-2 rounded-lg"
-                    onClick={()=>handleApprove(req.email)}>
+                    onClick={() => handleApprove(req.email)}
+                  >
                     Approve
                   </Button>
                 </div>
