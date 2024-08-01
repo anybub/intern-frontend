@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
@@ -13,15 +14,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { SignInValidation } from "@/lib/validation";
 import { z } from "zod";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loader from "@/components/shared/Loader";
 import { useMutation } from "@tanstack/react-query";
 import useUserStore from "@/store/useUser";
+import { UserType } from "@/store/useUser";
 const SignInForm = () => {
-  const navigate= useNavigate();
-  const {setUser}=useUserStore((state)=>{
+  const {toast} = useToast();
+  const navigate = useNavigate();
+  const {setUser} = useUserStore((state)=>{
     return {
-    setUser:state.setUser}
+      setUser: state.setUser
+    }
   });
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignInValidation>>({
@@ -31,23 +35,48 @@ const SignInForm = () => {
       password: "",
     },
   });
-  const logIn=useMutation({
-    mutationFn:async (values: z.infer<typeof SignInValidation>)=>{
-      const res=await fetch("/api/auth/login",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
+  const logIn = useMutation({
+    mutationFn: async (values: z.infer<typeof SignInValidation>) => {
+      const res = await fetch("http://localhost:5000/api/v1/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body:JSON.stringify(values)
-      }).then((res)=>res.json());
+        body: JSON.stringify(values),
+      }).then((res) => res.json());
       return res;
-    }
-  })
+    },
+  });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignInValidation>) {
-    const data= await logIn.mutateAsync(values);
-    setUser(data);
-    navigate("/");
+    try {
+      let data = await logIn.mutateAsync(values);
+      data=data.data;
+      const userData: UserType = {
+        username: data?.user?.username,
+        email: data?.user?.email,
+        role: data?.user?.role,
+        _id: data?.user?._id,
+        token: data?.token,
+        address: data?.user?.address,
+        branch: data?.user?.branch,
+        scholarId: data?.user?.scholarId,
+      };
+      console.log(userData);
+      setUser(userData);
+      navigate("/");
+    } catch (err){
+      toast(
+        {
+          title: "Error",
+          variant:"destructive",
+          description:"Something went wrong",
+        }
+      )
+      form.setError("email", {
+        message: "Invalid email or password",
+      });
+    }
   }
   return (
     <Form {...form}>

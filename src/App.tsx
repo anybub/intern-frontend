@@ -7,6 +7,7 @@ import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Home, ElectionResultsPage, AdminDashBoard } from "./_root/pages";
 import Dashboard from "./_root/pages/admin/Dashboard";
+import { Toaster } from "./components/ui/toaster";
 function App() {
     return (
         <main className="flex h-screen">
@@ -31,6 +32,7 @@ function App() {
                     />
                 </Route>
             </Routes>
+            <Toaster />
         </main>
     );
 }

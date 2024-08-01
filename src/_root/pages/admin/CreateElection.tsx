@@ -28,7 +28,6 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import "react-datepicker/dist/react-datepicker.css";
 import { ElectionValidation } from "@/lib/validation";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
