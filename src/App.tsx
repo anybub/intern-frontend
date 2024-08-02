@@ -5,9 +5,10 @@ import SignupForm from "./_auth/forms/SignupForm";
 import SignInForm from "./_auth/forms/SignInForm";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
-import { Home, ElectionResultsPage, AdminDashBoard } from "./_root/pages";
+import { Home, ElectionResultsPage } from "./_root/pages";
 import Dashboard from "./_root/pages/admin/Dashboard";
 import { Toaster } from "./components/ui/toaster";
+//import VoteCast from "./_root/pages/home/VoteCast";
 function App() {
     return (
         <main className="flex h-screen">
@@ -21,16 +22,16 @@ function App() {
                 {/* private routes */}
                 <Route element={<RootLayout />}>
                     <Route index element={<Home />} />
-                    <Route
+                    {/* <Route
                         path="/createElection"
                         element={<AdminDashBoard />}
-                    />
+                    /> */}
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route
                         path="/result/:id"
                         element={<ElectionResultsPage />}
                     />
-                    <Route path="/votecast" element={<VoteCast />} />
+                    {/* <Route path="/votecast" element={<VoteCast />} /> */}
                 </Route>
             </Routes>
             <Toaster />

@@ -72,7 +72,8 @@ const Dashboard = () => {
                     },
                 }
             ).then((res) => res.json());
-            return res;
+            console.log("rrequests", res.data);
+            return res.data;
         },
     });
     const { isPending: electionPending, data: elections } = useQuery({
@@ -85,7 +86,8 @@ const Dashboard = () => {
                     Authorization: `Bearer ${user?.token}`,
                 },
             }).then((res) => res.json());
-            return res;
+            console.log("elections", res);
+            return res.data;
         },
     });
     useEffect(() => {
@@ -136,28 +138,30 @@ const Dashboard = () => {
                 <p>Email: {user?.email}</p>
                 <p>Role: {user?.role}</p>
             </div>
-            {(user?.role === "Admin" || user?.role === "Super Admin") && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-4">
-                    {electionPending && <p>Loading...</p>}
-                    {elections &&
-                        elections.map((elec: ElectionType) => (
-                            <PreviousElectionCard
-                                key={elec._id}
-                                title={elec.name}
-                                desp={elec.desp}
-                                id={elec._id}
-                            />
-                        ))}
-                </div>
-            )}
-            {(user?.role === "Admin" || user?.role === "Super Admin") && (
-                <Button
-                    className="bg-orange-500 text-white px-4 py-2 rounded-lg"
-                    onClick={() => navigate("/createElection")}>
-                    Create Election
-                </Button>
-            )}
-            {user?.role === "General" && (
+            {user &&
+                (user?.role === "Admin" || user?.role === "Super Admin") && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-4">
+                        {electionPending && <p>Loading...</p>}
+                        {elections &&
+                            elections.map((elec: ElectionType) => (
+                                <PreviousElectionCard
+                                    key={elec._id}
+                                    title={elec.name}
+                                    desp={elec.desp}
+                                    id={elec._id}
+                                />
+                            ))}
+                    </div>
+                )}
+            {user &&
+                (user?.role === "Admin" || user?.role === "Super Admin") && (
+                    <Button
+                        className="bg-orange-500 text-white px-4 py-2 rounded-lg"
+                        onClick={() => navigate("/createElection")}>
+                        Create Election
+                    </Button>
+                )}
+            {user && user?.role === "General" && (
                 <Button
                     className="bg-orange-500 text-white px-4 py-2 rounded-lg"
                     onClick={handleRequest}
@@ -165,7 +169,7 @@ const Dashboard = () => {
                     Request To Become A Admin
                 </Button>
             )}
-            {user.role === "Super Admin" && (
+            {user && user?.role === "Super Admin" && (
                 <div className="w-full">
                     <h2 className="h2-bold p-3 text-off-white">
                         Approve pending requests to become an admin
