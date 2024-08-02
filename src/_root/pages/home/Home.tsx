@@ -1,7 +1,5 @@
 import HeroSlider from "@/components/shared/HeroSlider";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
 const Home = () => {
     return (
         <div className="bg-dark-1">
@@ -9,21 +7,8 @@ const Home = () => {
             <div className="flex flex-col text-center gap-10 mt-5">
                 <div>
                     <h2 className="h2-bold p-3 text-off-white">About</h2>
-                    <p className="px-4 body-medium text-light-2 flex items-center">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Vero optio quae voluptatibus quod sapiente nihil
-                        numquam? Quae odit iste sit, itaque tenetur, at ab
-                        placeat voluptas labore fuga laboriosam totam deleniti
-                        nostrum quasi vitae quam porro molestias accusantium,
-                        est ipsam? Illum consequuntur optio repellendus
-                        molestias tempore tempora eveniet? Aspernatur nulla sit
-                        sequi, quibusdam consectetur omnis non doloremque ipsa
-                        hic debitis et harum possimus, sed modi quisquam
-                        consequatur fugit asperiores temporibus laborum
-                        cupiditate, aperiam quo exercitationem. Magni, soluta
-                        odio porro voluptates laudantium, temporibus ab tempora
-                        beatae architecto perferendis alias itaque hic dolorem.
-                        Accusamus quos in, minima dolor totam iusto facere iste?
+                    <p className="w-[80%] m-auto body-medium text-light-2">
+                        e-Election is a modern voting system that leverages blockchain technologies to ensure transparency, security, and immutability of the voting process. By utilizing blockchain, every vote is recorded on a decentralized and tamper-proof ledger, making it virtually impossible to manipulate or alter the results. This technology eliminates the need for intermediaries and provides a trustless environment for conducting elections. With e-Election, voters can have confidence in the integrity of the electoral process, and the results can be easily audited and verified by anyone. Join us in embracing the future of democracy with e-Election and blockchain technologies.
                     </p>
                 </div>
                 <div>
@@ -110,13 +95,6 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="flex justify-center mt-10">
-                <Link to="/createElection">
-                    <Button className="shad-button_primary">
-                        Create Election
-                    </Button>
-                </Link>
             </div>
         </div>
     );

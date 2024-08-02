@@ -28,12 +28,14 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-import "react-datepicker/dist/react-datepicker.css";
 import { ElectionValidation } from "@/lib/validation";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-const CreateElection = () => {
-  const navigate = useNavigate();
+import { useToast } from "@/components/ui/use-toast";
+interface CreateElectionProps {
+  setElectionId: (id: string) => void;
+}
+const CreateElection = ({setElectionId}:CreateElectionProps) => {
+  const {toast} = useToast();
   const form = useForm<z.infer<typeof ElectionValidation>>({
     resolver: zodResolver(ElectionValidation),
     defaultValues: {
@@ -45,7 +47,7 @@ const CreateElection = () => {
   });
   const makeElection = useMutation({
     mutationFn: async (values: z.infer<typeof ElectionValidation>) => {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("http://localhost:5000/api/v1/election", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,8 +58,20 @@ const CreateElection = () => {
     },
   });
   async function onSubmit(values: z.infer<typeof ElectionValidation>) {
-    await makeElection.mutateAsync(values);
-    navigate("/dashboard");
+    try{
+      const data= await makeElection.mutateAsync(values);
+      toast({
+        title: "Election Created",
+        description: "Election has been created successfully",
+      });
+      setElectionId(data.data._id);
+    }catch{
+      toast({
+        title: "Election Creation Failed",
+        description: "Failed to create election",
+        variant: "destructive",
+      });
+    }
   }
   form.watch();
   return (
@@ -166,10 +180,6 @@ const CreateElection = () => {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>

@@ -1,19 +1,25 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { topbarLinks } from "@/constants";
 import useUserStore from "@/store/useUser";
 
 const Topbar = () => {
-  const { user, setUser } = useUserStore((state) => {
+  const navigate = useNavigate();
+  const { user } = useUserStore((state) => {
     return {
       user: state.user,
-      setUser: state.setUser,
     };
   });
+  const setUser = useUserStore((state)=>state.setUser);
   type INavLink = {
     imgURL: string;
     route: string;
     label: string;
+  };
+  const handleLogout = () => {
+    console.log(setUser);
+    setUser(null);
+    navigate("/");
   };
   const { pathname } = useLocation();
   return (
@@ -34,9 +40,6 @@ const Topbar = () => {
         <ul className="flex flex-between gap-5 lg:gap-10">
           {topbarLinks.map((link: INavLink) => {
             const isActive = pathname === link.route;
-            if (link.label === "Hold a Election" && !user) {
-              return null;
-            }
             return (
               <li
                 key={link.label}
@@ -63,15 +66,26 @@ const Topbar = () => {
         </ul>
         <div className="flex">
           {user ? (
-            <Button
-              onClick={() => setUser(null)}
-              className="bg-danger-500 text-white px-4 py-2 rounded-lg"
-            >
-              Logout
-            </Button>
+            <div className="flex flex-row gap-2">
+              <Button
+                className="bg-primary-500 text-white px-4 py-2 rounded-lg"
+                onClick={() => navigate("/dashboard")}
+              >
+                Dashboard
+              </Button>
+              <Button
+                onClick={handleLogout}
+                className="bg-orange-500 text-white px-4 py-2 rounded-lg"
+              >
+                Logout
+              </Button>
+            </div>
           ) : (
-            <Button className="bg-primary-500 text-white px-4 py-2 rounded-lg">
-              <Link to="/sign-in">Login</Link>
+            <Button
+              className="bg-primary-500 text-white px-4 py-2 rounded-lg"
+              onClick={() => navigate("/sign-in")}
+            >
+              Login
             </Button>
           )}
         </div>
