@@ -19,9 +19,4 @@ export const topbarLinks = [
     //     route: "/votes",
     //     label: "Votes",
     // },
-    {
-        imgURL: "/assets/votes.png",
-        route: "/createElection",
-        label: "Hold a Election",
-    },
 ];
