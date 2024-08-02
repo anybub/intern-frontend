@@ -79,13 +79,16 @@ const Dashboard = () => {
     const { isPending: electionPending, data: elections } = useQuery({
         queryKey: ["getElections"],
         queryFn: async () => {
-            const res = await fetch("http://localhost:5000/api/v1/elections", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${user?.token}`,
-                },
-            }).then((res) => res.json());
+            const res = await fetch(
+                "http://localhost:5000/api/v1/election/elections",
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user?.token}`,
+                    },
+                }
+            ).then((res) => res.json());
             console.log("elections", res);
             return res.data;
         },
