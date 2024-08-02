@@ -9,7 +9,8 @@ import { Home, ElectionResultsPage } from "./_root/pages";
 import Dashboard from "./_root/pages/admin/Dashboard";
 import { Toaster } from "./components/ui/toaster";
 import CreateElectionDashboard from "./_root/pages/admin/CreateElectionDashboard";
-//import VoteCast from "./_root/pages/home/VoteCast";
+import ElectionVote from "./_root/pages/home/ElectionVote";
+
 function App() {
     return (
         <main className="flex h-screen">
@@ -36,7 +37,10 @@ function App() {
                         path="/result/:id"
                         element={<ElectionResultsPage />}
                     />
-                    {/* <Route path="/votecast" element={<VoteCast />} /> */}
+                    <Route
+                        path="/electionVote/:electionId"
+                        element={<ElectionVote />}
+                    />
                 </Route>
             </Routes>
             <Toaster />

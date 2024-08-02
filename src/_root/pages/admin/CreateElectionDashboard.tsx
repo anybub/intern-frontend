@@ -37,7 +37,9 @@ const CreateElectionDashboard = () => {
                 {show === 1 && electionId !== undefined && (
                     <AddCandidate electionId={electionId} />
                 )}
-                {show === 2 && electionId !== undefined && <AddVoters />}
+                {show === 2 && electionId !== undefined && (
+                    <AddVoters electionId={electionId} />
+                )}
             </div>
         </div>
     );

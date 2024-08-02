@@ -1,9 +1,10 @@
 import React from "react";
+import { Button } from "@/components/ui/button";
 
 interface CandidateCardProps {
     initial: boolean;
     candidate: {
-        id: number;
+        id: string;
         name: string;
         scholarId: string;
         branch: string;
@@ -33,12 +34,12 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
                 </p>
             </div>
             <div className="px-6 pt-4 pb-2 flex gap-4">
-                <button
+                <Button
                     type="button"
                     onClick={handleVote}
                     className="bg-blue-500 h-[100%] flex items-center justify-center w-[100%] text-white p-2 rounded hover:bg-green-500">
                     {initial ? "Voted" : "Vote"}
-                </button>
+                </Button>
             </div>
         </div>
     );

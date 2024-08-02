@@ -145,7 +145,7 @@ const Dashboard = () => {
                 (user?.role === "Admin" || user?.role === "Super Admin") && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-4">
                         {electionPending && <p>Loading...</p>}
-                        {elections &&
+                        {elections.length > 0 &&
                             elections.map((elec: ElectionType) => (
                                 <PreviousElectionCard
                                     key={elec._id}

@@ -97,7 +97,7 @@ const Home: React.FC = () => {
                         {data.upcomingElections.length > 0 ? (
                             data.upcomingElections.map(
                                 (election: Partial<ElectionType>) => (
-                                    <Link to={`/elections/${election._id}`}>
+                                    <Link to={`/electionVote/${election._id}`}>
                                         <div
                                             key={election._id}
                                             className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200">
