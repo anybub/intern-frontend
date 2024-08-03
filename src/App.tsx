@@ -24,10 +24,10 @@ function App() {
                 {/* private routes */}
                 <Route element={<RootLayout />}>
                     <Route index element={<Home />} />
-                    {/* <Route
+                    <Route
                         path="/createElection"
                         element={<CreateElectionDashboard />}
-                    /> */}
+                    />
                     <Route
                         path="/createElection/:id"
                         element={<CreateElectionDashboard />}

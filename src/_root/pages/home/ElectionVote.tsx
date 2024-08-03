@@ -33,18 +33,28 @@ const ElectionVote: React.FC = () => {
                 });
             }
             const result = await res.json();
+            console.log(result.data);
             return result.data;
         },
     });
 
     const handleVote = (id: string) => {
         setVotedFor(id);
-        alert(`You voted for candidate with id: ${id}`);
+        toast({
+            title: "Success",
+            description: "You have successfully voted",
+            // variant: "success",
+        });
+        // alert(`You voted for candidate with id: ${id}`);
     };
 
     const handleEndElection = () => {
-        alert("Election ended.");
-        // Add any additional logic for ending the election here
+        // todo end election
+
+        toast({
+            title: "Success",
+            description: "Election ended successfully",
+        });
     };
 
     if (isLoading) {
@@ -52,7 +62,7 @@ const ElectionVote: React.FC = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto w-full px-4">
             <h1 className="text-3xl font-bold mt-8 mb-4 text-center">
                 {data.name}
             </h1>
@@ -60,27 +70,31 @@ const ElectionVote: React.FC = () => {
                 Post: {data.post}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {data.candidates.map((candidate: Partial<UserType>) => (
+                {data?.candidates.map((candidate: Partial<UserType>) => (
                     <div key={candidate._id} className="flex justify-center">
                         <CandidateCard
                             initial={votedFor === candidate._id}
                             candidate={{
-                                id: candidate._id,
-                                name: candidate.username,
-                                scholarId: candidate.scholarId,
-                                branch: candidate.branch,
+                                id: candidate._id as string,
+                                name: candidate.username as string,
+                                scholarId: candidate.scholarId as string,
+                                branch: candidate.branch as string,
                             }}
-                            handleVote={() => handleVote(candidate._id)}
+                            handleVote={() =>
+                                handleVote(candidate._id as string)
+                            }
                         />
                     </div>
                 ))}
             </div>
             <div className="flex justify-center mt-8">
-                <Button
-                    onClick={handleEndElection}
-                    className="bg-blue-500 h-[100%] flex items-center justify-center text-white py-2 rounded px-6  hover:bg-green-500">
-                    End Election
-                </Button>
+                {user?._id === data?.creator && (
+                    <Button
+                        onClick={handleEndElection}
+                        className="bg-blue-500 h-[100%] flex items-center justify-center text-white py-2 rounded px-6  hover:bg-green-500">
+                        End Election
+                    </Button>
+                )}
             </div>
         </div>
     );

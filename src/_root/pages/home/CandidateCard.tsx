@@ -18,9 +18,9 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
     handleVote,
 }) => {
     return (
-        <div className="max-w-sm rounded overflow-hidden shadow-lg mt-4 bg-primary-700">
+        <div className="bg-primary-700 border rounded-lg shadow-md p-6 m-9 w-full">
             <img
-                className="w-full h-40 object-cover rounded"
+                className="w-full h-48 object-cover rounded"
                 src="https://via.placeholder.com/400"
                 alt="Candidate"
             />

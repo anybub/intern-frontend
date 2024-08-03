@@ -26,8 +26,8 @@ const AddCandidate = ({ electionId }: props) => {
                     },
                 }
             ).then((res) => res.json());
-            console.log(data);
-            return data.data;
+            console.log(data.data);
+            return data.data.candidates;
         },
     });
     const handleSubmit = async (e) => {
@@ -114,7 +114,7 @@ const AddCandidate = ({ electionId }: props) => {
                 <h1>Already Added Candidates</h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-6">
                     {isPending && <p>Loading...</p>}
-                    {data &&
+                    {data?.length > 0 &&
                         data.map((e: Partial<UserType>) => (
                             <CandidateCard
                                 key={e?.scholarId}

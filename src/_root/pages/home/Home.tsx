@@ -66,7 +66,7 @@ const Home: React.FC = () => {
                         Current Elections
                     </h2>
                     <div className="flex flex-col md:flex-row">
-                        {data.ongoingElections.length > 0 ? (
+                        {data?.ongoingElections?.length > 0 ? (
                             data.ongoingElections.map(
                                 (election: Partial<ElectionType>) => (
                                     <Link
@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                         Upcoming Elections
                     </h2>
                     <div className="flex flex-col md:flex-row">
-                        {data.upcomingElections.length > 0 ? (
+                        {data?.upcomingElections?.length > 0 ? (
                             data.upcomingElections.map(
                                 (election: Partial<ElectionType>) => (
                                     <Link to={`/electionVote/${election._id}`}>
