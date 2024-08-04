@@ -13,7 +13,7 @@ import ElectionVote from "./_root/pages/home/ElectionVote";
 
 function App() {
     return (
-        <main className="flex h-screen">
+        <main className="flex h-screen flex-col">
             <Routes>
                 {/* public routes */}
                 <Route element={<AuthLayout />}>

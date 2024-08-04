@@ -30,7 +30,7 @@ const AddCandidate = ({ electionId }: props) => {
             return data.data.candidates;
         },
     });
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             let data = await fetch(
