@@ -8,7 +8,9 @@ import RootLayout from "./_root/RootLayout";
 import { Home, ElectionResultsPage } from "./_root/pages";
 import Dashboard from "./_root/pages/admin/Dashboard";
 import { Toaster } from "./components/ui/toaster";
-//import VoteCast from "./_root/pages/home/VoteCast";
+import CreateElectionDashboard from "./_root/pages/admin/CreateElectionDashboard";
+import ElectionVote from "./_root/pages/home/ElectionVote";
+
 function App() {
     return (
         <main className="flex h-screen">
@@ -22,16 +24,23 @@ function App() {
                 {/* private routes */}
                 <Route element={<RootLayout />}>
                     <Route index element={<Home />} />
-                    {/* <Route
+                    <Route
                         path="/createElection"
-                        element={<AdminDashBoard />}
-                    /> */}
+                        element={<CreateElectionDashboard />}
+                    />
+                    <Route
+                        path="/createElection/:id"
+                        element={<CreateElectionDashboard />}
+                    />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route
                         path="/result/:id"
                         element={<ElectionResultsPage />}
                     />
-                    {/* <Route path="/votecast" element={<VoteCast />} /> */}
+                    <Route
+                        path="/electionVote/:electionId"
+                        element={<ElectionVote />}
+                    />
                 </Route>
             </Routes>
             <Toaster />

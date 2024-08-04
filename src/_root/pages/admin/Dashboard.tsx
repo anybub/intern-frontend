@@ -79,13 +79,16 @@ const Dashboard = () => {
     const { isPending: electionPending, data: elections } = useQuery({
         queryKey: ["getElections"],
         queryFn: async () => {
-            const res = await fetch("http://localhost:5000/api/v1/elections", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${user?.token}`,
-                },
-            }).then((res) => res.json());
+            const res = await fetch(
+                "http://localhost:5000/api/v1/election/elections",
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user?.token}`,
+                    },
+                }
+            ).then((res) => res.json());
             console.log("elections", res);
             return res.data;
         },
@@ -142,7 +145,7 @@ const Dashboard = () => {
                 (user?.role === "Admin" || user?.role === "Super Admin") && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mx-4">
                         {electionPending && <p>Loading...</p>}
-                        {elections &&
+                        {elections.length > 0 &&
                             elections.map((elec: ElectionType) => (
                                 <PreviousElectionCard
                                     key={elec._id}

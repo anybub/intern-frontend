@@ -1,40 +1,89 @@
+import useUserStore from "@/store/useUser";
+import { useMutation } from "@tanstack/react-query";
+import { useToast } from "../ui/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
 interface candidateCard {
-  initial: boolean;
-  username: string;
-  scholarId: string;
-  branch: string;
+    initial: boolean;
+    username: string;
+    scholarId: string;
+    branch: string;
+    electionId: string;
+    candidateId: string;
 }
-const CandidateCard = ({ initial ,username,scholarId,branch}: candidateCard) => {
-  return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg mt-4 bg-primary-500">
-      <img
-        className="w-full h-40 object-cover rounded"
-        src="https://cdn.britannica.com/38/196738-159-62BD9150/Slaves-sugarcane-island-aquatint-Caribbean-Antigua-Ten-1832.jpg"
-        alt="Sunset in the mountains"
-      />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{username}</div>
-        <p className="text-base text-white font-bold">{scholarId}</p>
-        <p className="text-base text-white font-bold">{branch}</p>
-      </div>
-      <div className="px-6 pt-4 pb-2 flex gap-4">
-        <button
-          type="submit"
-          className="bg-blue-500 h-[100%] flex items-center justify-center w-[100%] text-white p-2 rounded hover:bg-green-500"
-        >
-          Add
-        </button>
-        {initial && (
-          <button
-            type="submit"
-            className="bg-blue-500 h-[100%] flex items-center justify-center w-[100%] text-white p-2 rounded hover:bg-red"
-          >
-            Remove
-          </button>
-        )}
-      </div>
-    </div>
-  );
+const CandidateCard = ({
+    initial,
+    username,
+    scholarId,
+    branch,
+    electionId,
+    candidateId,
+}: candidateCard) => {
+    const user = useUserStore((state) => state.user);
+    const { toast } = useToast();
+    const q = useQueryClient();
+    const addCandidate = useMutation({
+        mutationFn: async () => {
+            const res = await fetch(
+                `http://localhost:5000/api/v1/election/addCandidate`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${user?.token}`,
+                    },
+                    body: JSON.stringify({
+                        electionId: electionId,
+                        candidateId: candidateId,
+                    }),
+                }
+            ).then((res) => res.json());
+            return res;
+        },
+    });
+    const handleSubmit = async () => {
+        try {
+            await addCandidate.mutateAsync();
+            q.invalidateQueries({
+                queryKey: ["candidates"],
+                exact: true,
+                refetchType: "active",
+            });
+            toast({
+                title: "Candidate Added",
+                description: "Candidate Added Successfully",
+            });
+        } catch (error) {
+            toast({
+                title: "Candidate NOT Added",
+                description: "Candidate Can't Be Added",
+                variant: "destructive",
+            });
+        }
+    };
+    return (
+        <div className="max-w-sm rounded overflow-hidden shadow-lg mt-4 bg-primary-500">
+            <img
+                className="w-full h-40 object-cover rounded"
+                src="https://cdn.britannica.com/38/196738-159-62BD9150/Slaves-sugarcane-island-aquatint-Caribbean-Antigua-Ten-1832.jpg"
+                alt="Sunset in the mountains"
+            />
+            <div className="px-6 py-4">
+                <div className="font-bold text-xl mb-2">{username}</div>
+                <p className="text-base text-white font-bold">{scholarId}</p>
+                <p className="text-base text-white font-bold">{branch}</p>
+            </div>
+            <div className="px-6 pt-4 pb-2 flex gap-4">
+                {!initial && (
+                    <button
+                        type="submit"
+                        className="bg-blue-500 h-[100%] flex items-center justify-center w-[100%] text-white p-2 rounded hover:bg-green-500"
+                        onClick={handleSubmit}>
+                        Add
+                    </button>
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default CandidateCard;
