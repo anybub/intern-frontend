@@ -2,7 +2,10 @@ import { z } from "zod";
 
 export const SignupValidation = z.object({
     username: z.string().min(1, "Name is required"),
-    scholarId: z.string().min(7, "Scholar ID must be 7 characters long").max(7, "Scholar ID must be 7 characters long"),
+    scholarId: z
+        .string()
+        .min(7, "Scholar ID must be 7 characters long")
+        .max(7, "Scholar ID must be 7 characters long"),
     email: z
         .string()
         .email("Invalid email address")
@@ -31,4 +34,13 @@ export const ElectionValidation = z.object({
         message: "Start time must be greater than current time.",
     }),
     desp: z.string().min(1, { message: "Description is required." }),
+});
+
+export const AddVoterValidation = z.object({
+    startingScholarId: z
+        .string()
+        .min(7, { message: "Scholar ID must be 7 characters long." }),
+    endingScholarId: z
+        .string()
+        .min(7, { message: "Scholar ID must be 7 characters long." }),
 });

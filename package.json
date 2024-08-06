@@ -21,6 +21,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "ethers": "^6.13.2",
+    "immer": "^10.1.1",
     "lucide-react": "^0.397.0",
     "nodemon": "^3.1.4",
     "react": "^18.3.1",

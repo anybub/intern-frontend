@@ -1,175 +1,187 @@
-import { useState } from "react";
-import CandidateCard from "../home/CandidateCard";
+import CandidateCard from "../../../components/shared/candidateCard";
 import { useQuery } from "@tanstack/react-query";
 import useUserStore, { UserType } from "@/store/useUser";
-// import { useUserStore } from "@/store/useUser";
-// import { log } from "console";
-
-// Define types for the branch and year keys
-type Branch = "cse" | "ece" | "eie" | "ee" | "me" | "ce";
-type Year = "first-year" | "second-year" | "third-year" | "final-year";
+import { useToast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import Loader from "@/components/shared/Loader";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { AddVoterValidation } from "@/lib/validation";
 interface Props {
-    electionId: string;
+  electionId: string;
+  blockChainElectionId: number;
 }
-const AddVoters = ({ electionId }: Props) => {
-    const user = useUserStore((state) => state.user);
-    const [error, setError] = useState<string | null>(null);
-    const [scholarIdRange, setScholarIdRange] = useState({
-        start: 1000000,
-        end: 9999999,
-    });
-
-    const ranges: Record<
-        Branch,
-        Record<Year, { start: number; end: number }>
-    > = {
-        cse: {
-            "first-year": { start: 2412001, end: 2412170 },
-            "second-year": { start: 2312001, end: 2312170 },
-            "third-year": { start: 2212001, end: 2212170 },
-            "final-year": { start: 2112001, end: 2112170 },
-        },
-        ece: {
-            "first-year": { start: 2414001, end: 2414170 },
-            "second-year": { start: 2314001, end: 2314170 },
-            "third-year": { start: 2214001, end: 2214170 },
-            "final-year": { start: 2114001, end: 2114170 },
-        },
-        eie: {
-            "first-year": { start: 211, end: 1999999 },
-            "second-year": { start: 2000000, end: 2999999 },
-            "third-year": { start: 3000000, end: 3999999 },
-            "final-year": { start: 4000000, end: 4999999 },
-        },
-        ee: {
-            "first-year": { start: 2413001, end: 2413170 },
-            "second-year": { start: 2313001, end: 2313170 },
-            "third-year": { start: 2213001, end: 2213170 },
-            "final-year": { start: 2113001, end: 2113170 },
-        },
-        me: {
-            "first-year": { start: 211, end: 1999999 },
-            "second-year": { start: 2000000, end: 2999999 },
-            "third-year": { start: 3000000, end: 3999999 },
-            "final-year": { start: 2116001, end: 4999999 },
-        },
-        ce: {
-            "first-year": { start: 2411001, end: 2411170 },
-            "second-year": { start: 2311001, end: 2311170 },
-            "third-year": { start: 2211001, end: 2211170 },
-            "final-year": { start: 2111001, end: 2111170 },
-        },
-    };
-    const { isPending, data } = useQuery({
-        queryKey: ["getVoters"],
-        queryFn: async () => {
-            const res = await fetch(
-                `http://localhost:5000/api/v1/election/getVoters?electionId=${electionId}`,
-                {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${user?.token}`,
-                    },
-                }
-            ).then((res) => res.json());
-            return res.data;
-        },
-    });
-    console.log("data", data);
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        const form = event.target as HTMLFormElement;
-        const branch = form.branch.value as Branch;
-        const year = form.year.value as Year;
-
-        if (ranges[branch] && ranges[branch][year]) {
-            console.log(ranges[branch][year]);
-            setScholarIdRange(ranges[branch][year]);
-
-            setError(null);
-        } else {
-            setError("Invalid branch or year selected.");
+const AddVoters = ({ electionId, blockChainElectionId }: Props) => {
+  const q = useQueryClient();
+  const { toast } = useToast();
+  const user = useUserStore((state) => state.user);
+  const form = useForm<z.infer<typeof AddVoterValidation>>({
+    resolver: zodResolver(AddVoterValidation),
+    defaultValues: {
+      startingScholarId: "",
+      endingScholarId: "",
+    },
+  });
+  const { isPending, data } = useQuery({
+    queryKey: ["getVoters"],
+    queryFn: async () => {
+      const res = await fetch(
+        `http://localhost:5000/api/v1/election/getVoters?electionId=${electionId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
         }
-    };
+      ).then((res) => res.json());
+      return res.data;
+    },
+  });
+  const addVoter = useMutation({
+    mutationKey: ["addVoter"],
+    mutationFn: async (values: z.infer<typeof AddVoterValidation>) => {
+      const res = await fetch(
+        `http://localhost:5000/api/v1/election/addVoter`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify({
+            startingScholarId: values.startingScholarId,
+            endingScholarId: values.endingScholarId,
+            electionId: electionId,
+          }),
+        }
+      ).then((res) => res.json());
+      return res;
+    },
+  });
+  const onSubmit = async (values: z.infer<typeof AddVoterValidation>) => {
+    try {
+      await addVoter.mutateAsync(values);
+      await q.invalidateQueries({
+        queryKey: ["getVoters"],
+        exact: true,
+        refetchType: "active",
+      });
+      form.reset();
+      toast({
+        title: "Voters added successfully",
+        variant: "default",
+        description: "Voters added successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        variant: "destructive",
+        description: "Something went wrong",
+      });
+    }
+  };
+  return (
+    <div className="container mx-auto p-4 bg-dark-2 ">
+      <div className="flex flex-col items-center justify-center m-2">
+        <Form {...form}>
+          <div className="sm:w-420 flex-center flex-col">
+            <img
+              className="bg-light-2 rounded-full"
+              src="/assets/National_Institute_Of_Technology_Silchar_Logo.png"
+              alt="logo"
+              height={100}
+              width={100}
+            />
+            <h3 className="h3-bold pt-2">Add the Voters</h3>
+            <p className="text-light-4 small-regular md:base-regular mt-2">
+              Give the starting and ending scholar ID of the voters you want to
+              add
+            </p>
 
-    return (
-        <div className="bg-dark-2 text-black">
-            <div className="container bg-dark-2 mx-auto px-8 p-8  shadow-md rounded-lg">
-                <h1 className="text-2xl text-center font-bold mb-4 text-white">
-                    Add Voters
-                </h1>
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                    <div>
-                        <label
-                            htmlFor="branch"
-                            className="block text-lg font-medium mb-2">
-                            Select Branch:
-                        </label>
-                        <select
-                            id="branch"
-                            name="branch"
-                            className="border rounded p-2 w-full">
-                            <option value="cse">CSE</option>
-                            <option value="ece">ECE</option>
-                            <option value="eie">EIE</option>
-                            <option value="ee">EE</option>
-                            <option value="me">ME</option>
-                            <option value="ce">CE</option>
-                        </select>
-                    </div>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-3 w-full mt-2"
+            >
+              <FormField
+                control={form.control}
+                name="startingScholarId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="shad-form_label">
+                      Starting Scholar ID
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="text" className="shad-input" {...field} />
+                    </FormControl>
+                    <FormMessage>Give Valid Scholar Id </FormMessage>
+                  </FormItem>
+                )}
+              />
 
-                    <div>
-                        <label
-                            htmlFor="year"
-                            className="block text-lg font-medium mb-2">
-                            Select Year:
-                        </label>
-                        <select
-                            id="year"
-                            name="year"
-                            className="border rounded p-2 w-full">
-                            <option value="first-year">1st Year</option>
-                            <option value="second-year">2nd Year</option>
-                            <option value="third-year">3rd Year</option>
-                            <option value="final-year">4th Year</option>
-                        </select>
-                    </div>
+              <FormField
+                control={form.control}
+                name="endingScholarId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="shad-form_label">
+                      Ending Scholar ID
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="text" className="shad-input" {...field} />
+                    </FormControl>
+                    <FormMessage>Give Valid ending scholar Id</FormMessage>
+                  </FormItem>
+                )}
+              />
 
-                    {error && (
-                        <div className="text-red-500 text-center">{error}</div>
-                    )}
-
-                    <div>
-                        <button
-                            type="submit"
-                            className="bg-blue-500 text-white p-2 rounded w-full">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div className="flex flex-col mt-8">
-                <h1>Already Added Voters</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-6">
-                    {isPending && <p>Loading...</p>}
-                    {data &&
-                        data.map((e: Partial<UserType>) => (
-                            <CandidateCard
-                                key={e?.scholarId}
-                                initial={true}
-                                username={e?.username || ""}
-                                branch={e?.branch || ""}
-                                scholarId={e?.scholarId || ""}
-                                candidateId={""}
-                                electionId={electionId}
-                            />
-                        ))}
-                </div>
-            </div>
+              <Button type="submit" className="shad-button_primary">
+                {addVoter.isPending ? (
+                  <div className="flex-center gap-2">
+                    <Loader /> Loading...
+                  </div>
+                ) : (
+                  "Add Voters"
+                )}
+              </Button>
+            </form>
+          </div>
+        </Form>
+      </div>
+      <div className="flex flex-col mt-8">
+        <h1>Already Added Voters</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 mt-6">
+          {isPending && <p>Loading...</p>}
+          {data &&
+            data.map((e: Partial<UserType>) => (
+              <CandidateCard
+                key={e?.scholarId}
+                initial={true}
+                username={e?.username || ""}
+                branch={e?.branch || ""}
+                scholarId={e?.scholarId || ""}
+                address={e?.address || ""}
+                candidateId={""}
+                electionId={electionId}
+                blockChainElectionId={blockChainElectionId}
+              />
+            ))}
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default AddVoters;

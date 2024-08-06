@@ -26,7 +26,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import useUserStore, { UserType } from "@/store/useUser";
 import { useMutation } from "@tanstack/react-query";
+import { useBlockChain } from "@/store/useBlockChain";
 const SignupForm = () => {
+  const account = useBlockChain((state) => state.account);
+  const connect = useBlockChain((state) => state.connect);
   const navigate = useNavigate();
   const { setUser } = useUserStore((state) => {
     return {
@@ -42,7 +45,7 @@ const SignupForm = () => {
       scholarId: "",
       email: "",
       password: "",
-      address: "",
+      address: account || "",
       branch: "cse",
     },
   });
@@ -95,55 +98,36 @@ const SignupForm = () => {
       return res;
     },
   });
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof SignupValidation>>({
+    resolver: zodResolver(SignupValidation),
+    defaultValues: {
+      username: "",
+      scholarId: "",
+      email: "",
+      password: "",
+      address: account || "",
+      branch: "cse",
+    },
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     try {
-      const result = await sendOtp.mutateAsync(values.email);
-      const otpStr = prompt(`${result?.message}:`);
-      // const otpStr = result?.otp;
-      console.log(result);
-      if (otpStr !== null) {
-        const otp = Number(otpStr);
-        const otpToken = result?.otpToken;
-
-        if (otp) {
-          const otpVerified = await verifyOtp.mutateAsync({
-            email: values.email,
-            otp,
-            otpToken,
-          });
-
-          if (otpVerified.success) {
-            let data = await signUp.mutateAsync(values);
-            data = data.data;
-            const userData: UserType = {
-              username: data.newUser.username,
-              email: data.newUser.email,
-              _id: data.newUser._id,
-              role: data.newUser.role,
-              address: data.newUser.address,
-              token: data.token,
-              branch: data.newUser.branch,
-              scholarId: data.newUser.scholarId,
-            };
-            setUser(userData);
-            navigate("/");
-          } else {
-            form.setError("email", {
-              message: "Invalid OTP",
-            });
-          }
-        } else {
-          form.setError("email", {
-            message: "OTP is required",
-          });
-        }
-      } else {
-        form.setError("email", {
-          message: "Please enter otp",
-        });
-      }
+      let data = await signUp.mutateAsync(values);
+      data = data.data;
+      const userData: UserType = {
+        username: data.newUser.username,
+        email: data.newUser.email,
+        _id: data.newUser._id,
+        role: data.newUser.role,
+        address: data.newUser.address,
+        token: data.token,
+        branch: data.newUser.branch,
+        scholarId: data.newUser.scholarId,
+      };
+      setUser(userData);
+      navigate("/");
     } catch (error) {
       form.setError("email", {
         message: "Invalid Credentials",
@@ -252,8 +236,28 @@ const SignupForm = () => {
                 <FormControl>
                   <Input type="text" className="shad-input" {...field} />
                 </FormControl>
-                <FormMessage about="Provide Metamask Account Address" />
-                <FormDescription about="Provide Metamask Address" />
+                <FormDescription className="flex flex-col justify-between items-center gap-4">
+                  {!account && (
+                    <p>
+                      Please connect your metamask account to get the address
+                    </p>
+                  )}
+                  {!account && (
+                    <Button
+                      onClick={connect}
+                      className="shad-button_primary bg-orange-500"
+                      size={"sm"}
+                    >
+                      Connect
+                    </Button>
+                  )}
+                  {account && (
+                    <h3 className="font-semibold text-white">
+                      Paste This Address
+                    </h3>
+                  )}
+                  {account && <p>{account}</p>}
+                </FormDescription>
               </FormItem>
             )}
           />

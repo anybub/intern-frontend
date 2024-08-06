@@ -2,20 +2,22 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 
 interface CandidateCardProps {
-    initial: boolean;
+    isEligible: boolean;
     candidate: {
         id: string;
         name: string;
         scholarId: string;
         branch: string;
     };
+    startTime: Date;
     handleVote: () => void;
 }
 
-const CandidateCard: React.FC<CandidateCardProps> = ({
-    initial,
+const CandidateVoteCard: React.FC<CandidateCardProps> = ({
+    isEligible,
     candidate,
     handleVote,
+    startTime,
 }) => {
     return (
         <div className="bg-primary-700 border rounded-lg shadow-md p-6 m-9 w-full">
@@ -33,16 +35,18 @@ const CandidateCard: React.FC<CandidateCardProps> = ({
                     Branch: {candidate.branch}
                 </p>
             </div>
-            <div className="px-6 pt-4 pb-2 flex gap-4">
-                <Button
-                    type="button"
-                    onClick={handleVote}
-                    className="bg-blue-500 h-[100%] flex items-center justify-center w-[100%] text-white p-2 rounded hover:bg-green-500">
-                    {initial ? "Voted" : "Vote"}
-                </Button>
-            </div>
+            {new Date() > startTime && isEligible && (
+                <div className="px-6 pt-4 pb-2 flex gap-4">
+                    <Button
+                        type="button"
+                        onClick={handleVote}
+                        className="bg-blue-500 h-[100%] flex items-center justify-center w-[100%] text-white p-2 rounded hover:bg-green-500">
+                        Vote
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };
 
-export default CandidateCard;
+export default CandidateVoteCard;

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CandidateCard from "./CandidateCard"; // Ensure this path is correct
+import CandidateCard from "./CandidateVoteCard"; // Ensure this path is correct
 import { Button } from "@/components/ui/button";
 const candidates = [
     { id: 1, name: "Alice", scholarId: "2113131", branch: "Electrical" },
