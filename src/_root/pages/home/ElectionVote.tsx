@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { useBlockChain } from "@/store/useBlockChain";
 import { AddressLike, isError } from "ethers";
 const ElectionVote: React.FC = () => {
+  console.log("ElectionVote");
   const user = useUserStore((state) => state.user);
   const contract = useBlockChain((state) => state.contract);
   const { electionId } = useParams();

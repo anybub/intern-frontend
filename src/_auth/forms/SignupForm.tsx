@@ -26,12 +26,15 @@ import {
 import { useNavigate } from "react-router-dom";
 import useUserStore, { UserType } from "@/store/useUser";
 import { useMutation } from "@tanstack/react-query";
+import { useBlockChain } from "@/store/useBlockChain";
 const SignupForm = () => {
+  const account = useBlockChain((state) => state.account);
+  const connect = useBlockChain((state) => state.connect);
   const navigate = useNavigate();
-  const {setUser} = useUserStore((state)=>{
+  const { setUser } = useUserStore((state) => {
     return {
-      setUser: state.setUser
-    }
+      setUser: state.setUser,
+    };
   });
   const signUp = useMutation({
     mutationFn: async (values: z.infer<typeof SignupValidation>) => {
@@ -53,7 +56,7 @@ const SignupForm = () => {
       scholarId: "",
       email: "",
       password: "",
-      address: "",
+      address: account || "",
       branch: "cse",
     },
   });
@@ -62,7 +65,7 @@ const SignupForm = () => {
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     try {
       let data = await signUp.mutateAsync(values);
-      data=data.data;
+      data = data.data;
       const userData: UserType = {
         username: data.newUser.username,
         email: data.newUser.email,
@@ -183,8 +186,28 @@ const SignupForm = () => {
                 <FormControl>
                   <Input type="text" className="shad-input" {...field} />
                 </FormControl>
-                <FormMessage about="Provide Metamask Account Address" />
-                <FormDescription about="Provide Metamask Address" />
+                <FormDescription className="flex flex-col justify-between items-center gap-4">
+                  {!account && (
+                    <p>
+                      Please connect your metamask account to get the address
+                    </p>
+                  )}
+                  {!account && (
+                    <Button
+                      onClick={connect}
+                      className="shad-button_primary bg-orange-500"
+                      size={"sm"}
+                    >
+                      Connect
+                    </Button>
+                  )}
+                  {account && (
+                    <h3 className="font-semibold text-white">
+                      Paste This Address
+                    </h3>
+                  )}
+                  {account && <p>{account}</p>}
+                </FormDescription>
               </FormItem>
             )}
           />
