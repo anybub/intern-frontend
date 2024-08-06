@@ -10,7 +10,6 @@ import { format } from "date-fns";
 import { useBlockChain } from "@/store/useBlockChain";
 import { AddressLike, isError } from "ethers";
 const ElectionVote: React.FC = () => {
-  console.log("ElectionVote");
   const user = useUserStore((state) => state.user);
   const contract = useBlockChain((state) => state.contract);
   const { electionId } = useParams();
@@ -86,6 +85,30 @@ const ElectionVote: React.FC = () => {
       return result.data;
     },
   });
+  const endElection = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(
+        `http://localhost:5000/api/v1/election/endElection`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify({ electionId }),
+        }
+      );
+      if (!res.ok) {
+        toast({
+          title: "Error",
+          description: "Error ending election",
+          variant: "destructive",
+        });
+      }
+      const result = await res.json();
+      return result.data;
+    },
+  });
   const handleVote = async (candidateAddress: AddressLike) => {
     try {
       const tx = await contract?.vote(data?.electionId, candidateAddress);
@@ -116,6 +139,7 @@ const ElectionVote: React.FC = () => {
     try {
       const tx = await contract?.endElection(data?.electionId);
       await tx?.wait();
+      await endElection.mutateAsync();
       toast({
         title: "Success",
         description: "You have successfully ended election",

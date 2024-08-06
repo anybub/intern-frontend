@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useBlockChain } from "@/store/useBlockChain";
+import { AddressLike } from "ethers";
 interface reqType {
   _id: string;
   name: string;
   email: string;
+  address: string;
 }
 interface ElectionType {
   _id: string;
@@ -20,6 +22,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const account = useBlockChain((state) => state.account);
+  const contract = useBlockChain((state) => state.contract);
   const balance = useBlockChain((state) => state.balance);
   const queryClient = useQueryClient();
   const { user } = useUserStore((state) => {
@@ -36,6 +39,7 @@ const Dashboard = () => {
         body: JSON.stringify({
           email: user?.email,
           name: user?.username,
+          address: user?.address,
         }),
       }).then((res) => res.json());
       return res;
@@ -103,8 +107,10 @@ const Dashboard = () => {
       console.log(error);
     }
   };
-  const handleApprove = async (email: string) => {
+  const handleApprove = async (email: string, address: AddressLike) => {
     try {
+      const tx = await contract?.authorizeCreator(address);
+      await tx?.wait();
       await approveRequest.mutateAsync(email);
       await queryClient.invalidateQueries({
         queryKey: ["getRequests"],
@@ -189,7 +195,7 @@ const Dashboard = () => {
                   <p className="base-medium px-4">{req.email}</p>
                   <Button
                     className="bg-orange-500 text-white px-4 py-2 rounded-lg"
-                    onClick={() => handleApprove(req.email)}
+                    onClick={() => handleApprove(req.email, req.address)}
                   >
                     Approve
                   </Button>

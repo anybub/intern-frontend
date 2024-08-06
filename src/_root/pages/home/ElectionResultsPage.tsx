@@ -1,36 +1,46 @@
 import Result from "./Result";
-
-const candidates = [
-    {
-        name: "Candidate A",
-        scholarId: "2113131",
-        branch: "Electrical",
-        imageUrl: "https://cdn.britannica.com/38/196738-159-62BD9150/Slaves-sugarcane-island-aquatint-Caribbean-Antigua-Ten-1832.jpg",
-        voteCount: 120,
-    },
-    {
-        name: "Candidate B",
-        scholarId: "2113132",
-        branch: "Mechanical",
-        imageUrl: "https://cdn.britannica.com/38/196738-159-62BD9150/Slaves-sugarcane-island-aquatint-Caribbean-Antigua-Ten-1832.jpg",
-        voteCount: 150,
-    },
-    {
-        name: "Candidate C",
-        scholarId: "2113133",
-        branch: "Civil",
-        imageUrl: "https://cdn.britannica.com/38/196738-159-62BD9150/Slaves-sugarcane-island-aquatint-Caribbean-Antigua-Ten-1832.jpg",
-        voteCount: 100,
-    },
-];
-
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 const ElectionResultsPage = () => {
-    return (
-        <div className="flex-center flex-col w-full ">
-            <h1 className="font-extrabold text-lg">GYMKHANA ELECTION 2025</h1>
-            <Result post="President" candidates={candidates} />
-        </div>
-    );
+  const { electionId } = useParams();
+  const { toast } = useToast();
+  const { isLoading, data } = useQuery({
+    queryKey: ["getElectionInfo"],
+    queryFn: async () => {
+      const res = await fetch(
+        `http://localhost:5000/api/v1/election/getElectionInfo?electionId=${electionId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!res.ok) {
+        toast({
+          title: "Error",
+          description: "Error fetching ElectionInfo",
+          variant: "destructive",
+        });
+      }
+      const result = await res.json();
+      return result.data;
+    },
+  });
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  return (
+    <div className="flex-center flex-col w-full ">
+      <h1 className="font-extrabold text-lg">{data?.name}</h1>
+      <Result
+        post={data?.post}
+        candidates={data?.candidates}
+        electionId={data?.electionId}
+      />
+    </div>
+  );
 };
 
 export default ElectionResultsPage;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface Slide {
   id: number;
@@ -10,25 +10,25 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    image: 'assets/National_Institute_Of_Technology_Silchar_Logo.png',
-    title: 'Slide 1 Title',
-    description: 'Slide 1 Description',
+    image: "assets/imagebg.png",
+    title: "Slide 1 Title",
+    description: "Slide 1 Description",
   },
   {
     id: 2,
-    image: 'assets/National_Institute_Of_Technology_Silchar_Logo.png',
-    title: 'Slide 2 Title',
-    description: 'Slide 2 Description',
+    image: "assets/National_Institute_Of_Technology_Silchar_Logo.png",
+    title: "Slide 2 Title",
+    description: "Slide 2 Description",
   },
   {
     id: 3,
-    image: 'assets/National_Institute_Of_Technology_Silchar_Logo.png',
-    title: 'Slide 3 Title',
-    description: 'Slide 3 Description',
+    image: "assets/vote.jpg",
+    title: "Slide 3 Title",
+    description: "Slide 3 Description",
   },
 ];
 
-const HeroSlider= () => {
+const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -46,20 +46,17 @@ const HeroSlider= () => {
           <div
             key={slide.id}
             className={`absolute inset-0 transition-transform duration-1000 ${
-              index === currentSlide ? 'transform translate-x-0' : 'transform translate-x-full'
-            } ${index < currentSlide ? 'transform -translate-x-full' : ''}`}
+              index === currentSlide
+                ? "transform translate-x-0"
+                : "transform translate-x-full"
+            } ${index < currentSlide ? "transform -translate-x-full" : ""}`}
             style={{
               backgroundImage: `url(${slide.image})`,
-              backgroundSize: 'cover', // Ensures the image covers the entire slide
-              backgroundPosition: 'center', // Centers the image within the slide
-              backgroundRepeat: 'no-repeat', // Prevents the image from repeating
+              backgroundSize: "contain", // Ensures the image covers the entire slide
+              backgroundPosition: "center", // Centers the image within the slide
+              backgroundRepeat: "no-repeat", // Prevents the image from repeating
             }}
-          >
-            {/* <div className="absolute inset-0 bg-opacity-50 flex flex-col items-start justify-center p-8 text-white">
-              <h2 className="text-4xl font-bold mb-2">{slide.title}</h2>
-              <p className="text-lg">{slide.description}</p>
-            </div> */}
-          </div>
+          ></div>
         ))}
       </div>
       <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2">
@@ -67,7 +64,7 @@ const HeroSlider= () => {
           <button
             key={index}
             className={`w-3 h-3 rounded-full ${
-              index === currentSlide ? 'bg-white' : 'bg-gray-400'
+              index === currentSlide ? "bg-white" : "bg-gray-400"
             }`}
             onClick={() => setCurrentSlide(index)}
           />

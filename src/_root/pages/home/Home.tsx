@@ -54,6 +54,32 @@ const Home: React.FC = () => {
           </p>
         </div>
         <div>
+          <h2 className="h2-bold text-off-white">See the Results</h2>
+          <div className="flex flex-col md:flex-row">
+            {isLoading && (
+              <p className="text-light-2 m-auto text-center body-medium py-2">
+                Loading...
+              </p>
+            )}
+            {!isLoading && data?.endedElections?.length > 0 ? (
+              data.endedElections.map((election: Partial<ElectionType>) => (
+                <Link
+                  key={election._id}
+                  to={`/result/${election._id}`}
+                  className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200"
+                >
+                  <h4 className="h3-bold p-2">{election.name}</h4>
+                  <p className="base-medium px-4">{election.desp}</p>
+                </Link>
+              ))
+            ) : (
+              <p className="text-light-2 m-auto text-center body-medium py-2">
+                No elections have ended yet.
+              </p>
+            )}
+          </div>
+        </div>
+        <div>
           <h2 className="h2-bold text-off-white">Current Elections</h2>
           <div className="flex flex-col md:flex-row">
             {isLoading && (
