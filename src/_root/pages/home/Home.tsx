@@ -10,7 +10,7 @@ interface ElectionType {
 }
 const Home: React.FC = () => {
   const { toast } = useToast();
-  const { isLoading, data } = useQuery({
+  const { isLoading, data, error } = useQuery({
     queryKey: ["getElections"],
     queryFn: async () => {
       const res = await fetch(
@@ -21,18 +21,24 @@ const Home: React.FC = () => {
             "Content-Type": "application/json",
           },
         }
-      );
-      if (!res.ok) {
-        toast({
-          title: "Error",
-          description: "Error fetching elections",
-          variant: "destructive",
-        });
-      }
-      const data = await res.json();
-      return data.data;
+      ).then((res) => res.json());
+      return res.data;
     },
   });
+  // console.log(data);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    toast({
+      title: "Error",
+      description: "Error fetching elections",
+      variant: "destructive",
+    });
+    return <p>Error loading elections</p>;
+  }
   return (
     <div className="bg-dark-1">
       <HeroSlider />
@@ -56,22 +62,19 @@ const Home: React.FC = () => {
         <div>
           <h2 className="h2-bold text-off-white">Current Elections</h2>
           <div className="flex flex-col md:flex-row">
-            {isLoading && (
-              <p className="text-light-2 m-auto text-center body-medium py-2">
-                Loading...
-              </p>
-            )}
-            {!isLoading && data?.ongoingElections?.length > 0 ? (
-              data.ongoingElections.map((election: Partial<ElectionType>) => (
-                <Link
-                  key={election._id}
-                  to={`/electionVote/${election._id}`}
-                  className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200"
-                >
-                  <h4 className="h3-bold p-2">{election.name}</h4>
-                  <p className="base-medium px-4">{election.desp}</p>
-                </Link>
-              ))
+            {data?.ongoingElections?.length > 0 ? (
+              data.ongoingElections.map(
+                (election: Partial<ElectionType>, ind: number) => (
+                  <Link
+                    key={ind}
+                    to={`/elections/${election._id}`}
+                    className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200"
+                  >
+                    <h4 className="h3-bold p-2">{election.name}</h4>
+                    <p className="base-medium px-4">{election.desp}</p>
+                  </Link>
+                )
+              )
             ) : (
               <p className="text-light-2 m-auto text-center body-medium py-2">
                 No ongoing elections at the moment.
@@ -82,14 +85,9 @@ const Home: React.FC = () => {
         <div>
           <h2 className="h2-bold text-off-white">Upcoming Elections</h2>
           <div className="flex flex-col md:flex-row">
-            {isLoading && (
-              <p className="text-light-2 m-auto text-center body-medium py-2">
-                Loading...
-              </p>
-            )}
-            {!isLoading && data && data?.upcomingElections?.length > 0 ? (
+            {data?.upcomingElections?.length > 0 ? (
               data.upcomingElections.map((election: Partial<ElectionType>) => (
-                <Link to={`/electionVote/${election._id}`} key={election._id}>
+                <Link to={`/electionVote/${election._id}`}>
                   <div
                     key={election._id}
                     className="block p-4 m-4 bg-primary-700 rounded-lg shadow hover:shadow-lg transition-shadow hover:bg-secondary-500 hover:text-dark-1 duration-200"

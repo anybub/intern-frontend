@@ -36,7 +36,18 @@ const SignupForm = () => {
       setUser: state.setUser,
     };
   });
-
+  const signUp = useMutation({
+    mutationFn: async (values: z.infer<typeof SignupValidation>) => {
+      const res = await fetch("http://localhost:5000/api/v1/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      }).then((res) => res.json());
+      return res;
+    },
+  });
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -98,36 +109,55 @@ const SignupForm = () => {
       return res;
     },
   });
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof SignupValidation>>({
-    resolver: zodResolver(SignupValidation),
-    defaultValues: {
-      username: "",
-      scholarId: "",
-      email: "",
-      password: "",
-      address: account || "",
-      branch: "cse",
-    },
-  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     try {
-      let data = await signUp.mutateAsync(values);
-      data = data.data;
-      const userData: UserType = {
-        username: data.newUser.username,
-        email: data.newUser.email,
-        _id: data.newUser._id,
-        role: data.newUser.role,
-        address: data.newUser.address,
-        token: data.token,
-        branch: data.newUser.branch,
-        scholarId: data.newUser.scholarId,
-      };
-      setUser(userData);
-      navigate("/");
+      const result = await sendOtp.mutateAsync(values.email);
+      const otpStr = prompt(`${result?.message}:`);
+      // const otpStr = result?.otp;
+      console.log(result);
+      if (otpStr !== null) {
+        const otp = Number(otpStr);
+        const otpToken = result?.otpToken;
+
+        if (otp) {
+          const otpVerified = await verifyOtp.mutateAsync({
+            email: values.email,
+            otp,
+            otpToken,
+          });
+
+          if (otpVerified.success) {
+            let data = await signUp.mutateAsync(values);
+            data = data.data;
+            const userData: UserType = {
+              username: data.newUser.username,
+              email: data.newUser.email,
+              _id: data.newUser._id,
+              role: data.newUser.role,
+              address: data.newUser.address,
+              token: data.token,
+              branch: data.newUser.branch,
+              scholarId: data.newUser.scholarId,
+            };
+            setUser(userData);
+            navigate("/");
+          } else {
+            form.setError("email", {
+              message: "Invalid OTP",
+            });
+          }
+        } else {
+          form.setError("email", {
+            message: "OTP is required",
+          });
+        }
+      } else {
+        form.setError("email", {
+          message: "Please enter otp",
+        });
+      }
     } catch (error) {
       form.setError("email", {
         message: "Invalid Credentials",
